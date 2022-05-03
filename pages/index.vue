@@ -16,7 +16,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="item in usersData" :key="item.name">
+              <tr v-for="item in users" :key="item.name">
                 <td>{{ item.id }}</td>
                 <td>{{ item.email }}</td>
                 <td>{{ item.first_name }}</td>
@@ -29,9 +29,6 @@
       </v-card-text>
       <div class="text-center">
         <v-pagination
-          v-model="currentPageNumber"
-          :length="tableData.total_pages"
-          @input="handlePageChange"
         ></v-pagination>
       </div>
     </v-card>
@@ -41,27 +38,16 @@
 <script>
 export default {
   name: "IndexPage",
-  data() {
-    return {
-      tableData: {},
-      currentPageNumber: 1,
-      usersData: [],
-    };
+  computed: {
+    users() {
+      return this.$store.state.users.users;
+    },
+    usersData() {
+      return this.$store.state.users.usersData;
+    },
   },
   mounted() {
-    this.fetchUsersData(this.currentPageNumber);
-  },
-  methods: {
-    async fetchUsersData(pageNumber) {
-      const endPoint = "https://reqres.in/api/users";
-      const users = await this.$axios.$get(`${endPoint}?page=${pageNumber}`);
-      this.usersData = [...users.data];
-      this.tableData = { ...users };
-    },
-    handlePageChange(value) {
-      this.currentPageNumber = value;
-      this.fetchUsersData(value);
-    },
+    this.$store.dispatch("users/getUsers");
   },
 };
 </script>
