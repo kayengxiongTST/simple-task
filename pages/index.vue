@@ -26,7 +26,6 @@
             </tbody>
           </template>
         </v-simple-table>
-        {{ tableData }}
       </v-card-text>
       <div class="text-center">
         <v-pagination
@@ -56,7 +55,7 @@ export default {
     async fetchUsersData(pageNumber) {
       const endPoint = "https://reqres.in/api/users";
       const users = await this.$axios.$get(`${endPoint}?page=${pageNumber}`);
-      usersData = [...users.data];
+      this.usersData = [...users.data];
       this.tableData = { ...users };
     },
     handlePageChange(value) {
