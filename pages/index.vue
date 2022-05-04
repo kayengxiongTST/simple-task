@@ -29,6 +29,9 @@
       </v-card-text>
       <div class="text-center">
         <v-pagination
+          v-model="pagination"
+          @input="handlePageChange"
+          :length="tableData.total_pages"
         ></v-pagination>
       </div>
     </v-card>
@@ -36,18 +39,21 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from "vuex";
+
 export default {
   name: "IndexPage",
   computed: {
-    users() {
-      return this.$store.state.users.users;
-    },
-    usersData() {
-      return this.$store.state.users.usersData;
-    },
+    ...mapGetters(["users", "tableData"]),
   },
   mounted() {
-    this.$store.dispatch("users/getUsers");
+    this.onGetUsers(1);
+  },
+  methods: {
+    ...mapActions(["onGetUsers"]),
+    handlePageChange(value = 1) {
+      this.onGetUsers(value);
+    },
   },
 };
 </script>
